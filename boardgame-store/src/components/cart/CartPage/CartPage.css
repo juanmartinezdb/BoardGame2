@@ -1,0 +1,15 @@
+.cart-page {
+    padding: 20px;
+  }
+  .cart-items {
+    margin-bottom: 20px;
+  }
+  .btn-summary {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  

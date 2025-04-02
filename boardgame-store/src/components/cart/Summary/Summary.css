@@ -1,0 +1,29 @@
+.summary {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #fafafa;
+  }
+  .summary h2 {
+    margin-bottom: 10px;
+  }
+  .summary p {
+    margin: 5px 0;
+  }
+  .total {
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+  .btn-pay, .btn-shop {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .btn-shop {
+    background-color: #007bff;
+  }
+  

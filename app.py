@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from .cart_utilities.cart_utilities import validate_products, initialize_variables, check, apply_discount, CartError
+from cart_utilities.cart_utilities import validate_products, initialize_variables, check, apply_discount, CartError
 
 
 

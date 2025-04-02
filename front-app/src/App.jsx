@@ -16,10 +16,12 @@ function App() {
         <Header />
         <BrowserRouter>
           <NavBar />
+            <main>
           <Routes>
             <Route path={PRODUCTS} element={<ProductPage/>} />
             <Route path={CART} element={<CartPage/>} />
           </Routes>
+            </main>
         </BrowserRouter>
         <Footer />
       </div>
