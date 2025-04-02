@@ -1,0 +1,12 @@
+nav {
+    background-color: rgb(137, 144, 187);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 20px;
+    align-items: center;
+}
+.cart-image {
+    width: 30px;
+    filter: invert(1) sepia(1) saturate(10) hue-rotate(180deg);
+}

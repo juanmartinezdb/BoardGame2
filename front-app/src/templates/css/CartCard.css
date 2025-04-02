@@ -1,0 +1,26 @@
+.cart-card {
+    background-color: rgb(245, 245, 245);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 10px;
+    border: solid rgba(0, 0, 255, 0.2) 1px;
+    border-radius: 10px;
+    width: 40%;
+    margin: 20px;
+}
+
+.cart-card img {
+    width: 50px;
+    height: 50px;
+}
+.cart-card button {
+    background-color: rgb(211, 15, 15);
+    padding: 10px;
+}
+.price-row {
+    display: flex;
+}

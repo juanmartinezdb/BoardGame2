@@ -1,0 +1,11 @@
+.product-page{
+    background-color: white;
+}
+.cards-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 10px;
+    align-items: center;
+    justify-content: center;
+}

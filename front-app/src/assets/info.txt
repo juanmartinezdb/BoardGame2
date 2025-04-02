@@ -1,0 +1,1 @@
+imagenes y archivos que se tengan que cargar es como el resources de jakarta mas o menos
