@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from .cart_utilities.cart_utilities import validate_products, initialize_variables, check, apply_discount, CartError
+from cart_utilities.cart_utilities import validate_products, initialize_variables, check, apply_discount, CartError
 
 
 
@@ -56,7 +56,8 @@ def add_cart():
                 "price": product.get('price'), 
                 "discounted": discounted,
                 "manufacturer": product.get('manufacturer'),
-                "units":  data.get('units')
+                "units":  data.get('units'),
+                "max_stock": product.get('stock') + data.get('units')
             })
 
         message = "Product successfully added"
@@ -70,26 +71,55 @@ def add_cart():
 @app.route('/cart/remove', methods=['DELETE'])
 def remove_cart():
     try:
-        data, product, cart_item = initialize_variables(products,cart, request)
+        data, product, cart_item = initialize_variables(products, cart, request)
         check(cart_item, data, 'units')
+        
+        if product:
+            product['stock'] += data.get('units')
+        
         cart_item['units'] -= data.get('units')
         
-        if cart_item['units'] == 0:
+        if cart_item['units'] <= 0:
             cart.remove(cart_item)
             message = f"All units of {data.get('name')} removed"
-
         else:
-            if product:
-                cart_item['discounted'], discount_message = apply_discount(product, cart_item.get('units'))
-                message = f"Removed {data.get('units')} units of {cart_item.get('name')}"
-                product['stock'] += data.get('units')
-                if not discount_message:
-                    message+= " //Carefull DISCOUNT REMOVED!"
-        if product:
-            product['stock']+=data.get('units')
+            cart_item['discounted'], discount_message = apply_discount(product, cart_item.get('units'))
+            message = f"Removed {data.get('units')} units of {cart_item.get('name')}"
+            if not discount_message:
+                message += " //Careful, DISCOUNT REMOVED!"
+        
         return jsonify({"message": message})
     except CartError as e:
         return jsonify({"error": e.message}), 400
+    
+@app.route('/order', methods=['POST'])
+def create_order():
+    global cart, orders
+    if not cart:
+        return jsonify({"error": "Cart is empty"}), 400
+    
+    total = 0
+    for item in cart:
+        total += item['price'] * item['units']
+
+    order_id = len(orders) + 1
+
+    order = {
+        "order_id": order_id,
+        "items": cart.copy(),
+        "total": round(total, 2)
+    }
+    orders.append(order)
+    
+
+    cart = []
+
+    return jsonify({
+        "message": "Order created successfully",
+        "order_id": order_id,
+        "order": order
+    }), 201
+
     
 if __name__ == '__main__':
     app.run(debug=True)

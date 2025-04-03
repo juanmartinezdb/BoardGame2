@@ -24,7 +24,7 @@ export default function ProductCard({ product, onBuy }) {
       return;
     }
     onBuy(name, quantity);
-    setQty("");
+    setQty(1);
   };
 
   const priceWithDiscount = ((price, bulk_discount) => (price * (1 - bulk_discount.discount_percent/100)).toFixed(2));

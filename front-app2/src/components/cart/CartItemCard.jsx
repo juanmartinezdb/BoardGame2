@@ -7,21 +7,29 @@ export default function CartItemCard({ item, onUpdateQuantity, onRemove }) {
 
   const handleUnitsChange = (e) => {
     const value = e.target.value;
-    if (value === "" || (Number(value) >= 0 && Number.isInteger(Number(value)))) {
-      setUnits(value);
-      setError("");
-      onUpdateQuantity(item.name, parseInt(value) || 0);
+    const numericValue = Number(value);
+  
+    if (value === "" || (numericValue >= 0 && Number.isInteger(numericValue))) {
+      if (numericValue > item.max_stock) {
+        setError(`Only ${item.max_stock} units available`);
+      } else if (numericValue === 0) {
+        // eslint-disable-next-line no-restricted-globals
+        const confirmDelete = confirm(`Do you want to remove ${item.name} from your cart?`);
+        if (confirmDelete) {
+          onRemove(item.name, item.units);
+        } else {
+          setUnits(item.units);
+        }
+      } else {
+        setUnits(numericValue);
+        setError("");
+        onUpdateQuantity(item.name, numericValue || 0);
+      }
     } else {
       setError("Invalid quantity.");
     }
   };
 
-  const handleRemove = () => {
-    // eslint-disable-next-line no-restricted-globals
-    if (confirm(`Remove ${item.name} from cart?`)) {
-      onRemove(item.name);
-    }
-  };
 
   return (
     <div className="cart-item-card">
@@ -36,15 +44,17 @@ export default function CartItemCard({ item, onUpdateQuantity, onRemove }) {
               type="number"
               value={units}
               min="0"
+              max={item.max_stock}
               onChange={handleUnitsChange}
               className="units-input"
             />
           </label>
           {error && <span className="error">{error}</span>}
         </div>
-        <button className="btn-remove" onClick={handleRemove}>
+        <button className="btn-remove" onClick={() => onRemove(item.name, item.units)}>
           Remove Item
         </button>
+
       </div>
     </div>
   );

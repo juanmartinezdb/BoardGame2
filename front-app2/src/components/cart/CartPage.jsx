@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import CartItemCard from "./CartItemCard";
 import Summary from "./Summary";
 import "../../templates/css/CartPage.css";
-import { getCart, removeFromCart } from "../../utils/cartService";
+import { getCart, removeFromCart, updateCartQuantity, createOrder } from "../../utils/cartService";
 import { useNavigate } from "react-router-dom";
 import { PRODUCTS } from "../../utils/routes";
+
+
 
 export default function CartPage() {
     const [cart, setCart] = useState([]);
@@ -20,36 +22,54 @@ export default function CartPage() {
     async function loadCart() {
         const data = await getCart();
         setCart(data.cart);
-    }
+      }
+      
 
 
-    const handleUpdateQuantity = (name, newQuantity) => {
-        setCart((prevCart) => prevCart.map((item) => 
-            item.name === name ? { ...item, units: newQuantity } : item
-        )
-        );
-    };
-
-    const handleRemove = async (name) => {
-        const response = await removeFromCart(name);
-        if (response.error) {
-            alert(`Error: ${response.error}`);
-        } else {
-            alert(response.message);
-            loadCart();
+    const handleUpdateQuantity = async (name, newQuantity) => {
+        const currentItem = cart.find(item => item.name === name);
+        if (!currentItem) return;
+        
+        const diff = newQuantity - currentItem.units;
+        if(diff === 0) return; 
+      
+        const response = await updateCartQuantity(name, diff);
+        if(response.error) {
+          alert(`Error: ${response.error}`);
         }
-    };
+        loadCart();
+      };
+
+    const handleRemove = async (name, units) => {
+        const response = await removeFromCart(name, units);  
+        if (response.error) {
+          alert(`Error: ${response.error}`);
+        } else {
+          alert(response.message);
+          loadCart();
+        }
+      };
 
     const handleShowSummary = () => {
         setShowSummary(true);
     };
 
-    const handlePay = () => {
-        const OrderId = Math.floor(Math.random() * 100000);
-        setOrderId(OrderId);
-        setPaid(true);
-        alert(`Payment successful! Order #${OrderId}`);
-    };
+
+    const handlePay = async () => {
+        try {
+          const result = await createOrder();
+          if (result.error) {
+            alert(`Error: ${result.error}`);
+          } else {
+            setOrderId(result.order_id);
+            setPaid(true);
+            alert(`Payment successful! Order #${result.order_id}`);
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Error processing payment");
+        }
+      };
 
     const handleShopAgain = () => {
         setPaid(false);

@@ -18,7 +18,7 @@ export default function Summary({ cart, onPay, paid, orderId, onShopAgain }) {
       <p className="total">Total: ${finalTotal.toFixed(2)}</p>
       {!paid ? (
         <button className="btn-pay" onClick={onPay}>
-          Pay Now
+          Pay {finalTotal.toFixed(2)} €
         </button>
       ) : (
         <>
