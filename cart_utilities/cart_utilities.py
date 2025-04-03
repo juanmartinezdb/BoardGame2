@@ -16,14 +16,23 @@ def validate_products(products_list):
     return products_list
 
 #Funcion auxuliar para el descuento #AÑADIR A LO QUE DEVUELVE EL DESUENTO APLICADO PARA EL FRONT
+# def apply_discount(product, units):
+#     discount_info = product.get('bulk_discount')
+#     if discount_info and units >= discount_info.get('min_qty'):
+#         discount_percent = discount_info.get('discount_percent')
+#         price = product.get('price') * (1 - discount_percent / 100)
+#         message = f"{discount_percent}% discount applied to {product.get('name')}!!!"
+#         return price, message
+#     return product.get('price'), None
+
 def apply_discount(product, units):
     discount_info = product.get('bulk_discount')
-    if discount_info and units >= discount_info.get('min_qty'):
-        discount_percent = discount_info.get('discount_percent')
-        price = product.get('price') * (1 - discount_percent / 100)
-        message = f"{discount_percent}% discount applied to {product.get('name')}!!!"
-        return price, message
-    return product. get('price'), None
+    if ( discount_info and units >= discount_info.get('min_qty')):
+        discounted = round(product.get('price') * (discount_info.get('discount_percent') / 100), 2)
+        message = f"{discount_info.get('discount_percent')}% discount applied to {product.get('name')}!!!"
+        return discounted, message
+    return 0, None
+
 
 #Funcion de buscar por nombre que se repite alguna que otra vez
 def find_by_name(name, entity):

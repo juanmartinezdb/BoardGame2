@@ -1,0 +1,23 @@
+.cart-page {
+    padding: 20px;
+  }
+  .cart-items {
+    margin-bottom: 20px;
+  }
+  .btn-summary {
+    color: white;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .sections {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+  }
+  .summary {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: center;
+  }
