@@ -1,43 +1,36 @@
 import React, { useState } from "react";
 import "../../templates/css/CartItemCard.css";
 
-export default function CartItemCard({ item, onUpdateQuantity, onRemove }) {
+export default function CartItemCard({ item, onUpdateUnits, onRemove, paid }) {
   const [units, setUnits] = useState(item.units);
   const [error, setError] = useState("");
 
   const handleUnitsChange = (e) => {
     const value = e.target.value;
-    const numericValue = Number(value);
-  
-    if (value === "" || (numericValue >= 0 && Number.isInteger(numericValue))) {
-      if (numericValue > item.max_stock) {
-        setError(`Only ${item.max_stock} units available`);
-      } else if (numericValue === 0) {
-        // eslint-disable-next-line no-restricted-globals
-        const confirmDelete = confirm(`Do you want to remove ${item.name} from your cart?`);
-        if (confirmDelete) {
-          onRemove(item.name, item.units);
-        } else {
-          setUnits(item.units);
-        }
+    const inputNumber = Number(value);
+    if (inputNumber > item.max_stock) {
+      setError(`Only ${item.max_stock} units available`);
+    } else if (inputNumber === 0) {
+      // eslint-disable-next-line no-restricted-globals
+      if (confirm(`Do you want to remove ${item.name} from your cart?`)) {
+        onRemove(item.name, item.units);
       } else {
-        setUnits(numericValue);
-        setError("");
-        onUpdateQuantity(item.name, numericValue || 0);
+        setUnits(item.units);
       }
     } else {
-      setError("Invalid quantity.");
+      setUnits(inputNumber);
+      setError("");
+      onUpdateUnits(item.name, inputNumber || 0);
     }
   };
 
-
   return (
-    <div className="cart-item-card">
+    <div className={`cart-item-card ${(paid || item.max_stock==0)?"disabled-item-card":""}`}>
       <img src={item.image} alt={item.name} className="cart-item-image" />
       <div className="cart-item-info">
         <h3>{item.name}</h3>
         <p>Price: ${item.price.toFixed(2)}</p>
-        <div className="quantity-control">
+        <div className="units-control">
           <label>
             Units:
             <input
@@ -45,16 +38,20 @@ export default function CartItemCard({ item, onUpdateQuantity, onRemove }) {
               value={units}
               min="0"
               max={item.max_stock}
+              disabled={paid || item.max_stock ==0}
               onChange={handleUnitsChange}
               className="units-input"
             />
           </label>
           {error && <span className="error">{error}</span>}
         </div>
-        <button className="btn-remove" onClick={() => onRemove(item.name, item.units)}>
+        <button
+          className="btn-remove"
+          disabled={paid}
+          onClick={() => onRemove(item.name, item.units)}
+        >
           Remove Item
         </button>
-
       </div>
     </div>
   );

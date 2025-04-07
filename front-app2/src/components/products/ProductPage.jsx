@@ -15,12 +15,13 @@ export default function ProductPage() {
     fetchData();
   }, []);
 
-  const handleBuy = async (name, quantity) => {
-    const response = await addToCart(name, quantity);
+  const handleBuy = async (name, units) => {
+    const response = await addToCart(name, units);
     if (response.error) {
       alert(`Error: ${response.error}`);
     } else {
       alert(response.message);
+      setProducts( await getProducts());
     }
   };
 

@@ -24,7 +24,7 @@ import { CART_EP, CART_ADD_EP, CART_REMOVE_EP, CREATE_ORDER } from "./endpoints"
   }
 
 //Prueba  
-export async function updateCartQuantity(name, units) {
+export async function updateCartUnits(name, units) {
   const method = units > 0 ? "POST" : "DELETE";
   const endpoint = units > 0 ? CART_ADD_EP : CART_REMOVE_EP;
 

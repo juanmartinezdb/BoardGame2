@@ -1,5 +1,0 @@
-- plantillas html, crear fragmnetos para:
-    - header
-    - footer
-    - menu
-
